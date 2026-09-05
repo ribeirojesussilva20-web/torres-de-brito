@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torres de Brito — Barbearia em Luanda</title>
+<meta name="description" content="Barbearia Torres de Brito — cortes e cuidados masculinos em Luanda, Angola.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ===========================
+     TOKENS
+  =========================== */
+  :root{
+    --black: #060605;
+    --charcoal: #16140f;
+    --charcoal-2: #1f1c15;
+    --gold: #c8a15b;
+    --gold-bright: #e4c07e;
+    --cream: #efe9db;
+    --cream-dim: #b9b2a1;
+    --line: rgba(200,161,91,0.18);
+    --serif: 'Playfair Display', serif;
+    --sans: 'DM Sans', sans-serif;
+    --ease: cubic-bezier(.16,.8,.28,1);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--black);
+    color:var(--cream);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+  ul{ list-style:none; }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  ::selection{ background:var(--gold); color:var(--black); }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* thin gold rule used sparingly */
+  .rule{
+    width:56px; height:2px; background:var(--gold);
+  }
+
+  /* ===========================
+     HEADER
+  =========================== */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(6,6,5,0.75);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s var(--ease), background .3s var(--ease);
+  }
+  header.scrolled{
+    border-bottom-color:var(--line);
+    background:rgba(6,6,5,0.92);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:var(--serif);
+    font-size:1.35rem;
+    font-weight:600;
+    letter-spacing:0.06em;
+    color:var(--cream);
+  }
+  .logo span{ color:var(--gold); }
+
+  .nav-links{
+    display:flex; gap:40px;
+  }
+  .nav-links a{
+    font-size:0.95rem;
+    color:var(--cream-dim);
+    position:relative;
+    padding-bottom:4px;
+    transition:color .25s var(--ease);
+  }
+  .nav-links a::after{
+    content:'';
+    position:absolute; left:0; bottom:0;
+    width:0; height:1px; background:var(--gold);
+    transition:width .3s var(--ease);
+  }
+  .nav-links a:hover{ color:var(--cream); }
+  .nav-links a:hover::after{ width:100%; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:13px 26px;
+    font-family:var(--sans);
+    font-size:0.92rem;
+    font-weight:500;
+    border-radius:2px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .25s var(--ease), background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+    white-space:nowrap;
+  }
+  .btn-gold{
+    background:var(--gold);
+    color:var(--black);
+  }
+  .btn-gold:hover{
+    background:var(--gold-bright);
+    transform:translateY(-2px);
+  }
+  .btn-outline{
+    border-color:var(--line);
+    color:var(--cream);
+  }
+  .btn-outline:hover{
+    border-color:var(--gold);
+    color:var(--gold-bright);
+    transform:translateY(-2px);
+  }
+
+  .nav-cta{ display:flex; }
+
+  .burger{
+    display:none;
+    flex-direction:column;
+    gap:5px;
+    background:none; border:none;
+    cursor:pointer;
+    padding:6px;
+    z-index:110;
+  }
+  .burger span{
+    width:24px; height:1.5px; background:var(--cream);
+    transition:transform .3s var(--ease), opacity .3s var(--ease), background .3s var(--ease);
+  }
+  .burger.active span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); background:var(--gold);}
+  .burger.active span:nth-child(2){ opacity:0; }
+  .burger.active span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); background:var(--gold);}
+
+  .mobile-menu{
+    position:fixed; inset:0;
+    background:var(--black);
+    z-index:105;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:34px;
+    transform:translateY(-100%);
+    transition:transform .45s var(--ease);
+  }
+  .mobile-menu.open{ transform:translateY(0); }
+  .mobile-menu a{
+    font-family:var(--serif);
+    font-size:1.7rem;
+    color:var(--cream);
+  }
+  .mobile-menu a:hover{ color:var(--gold); }
+  .mobile-menu .btn{ margin-top:10px; }
+
+  /* ===========================
+     HERO
+  =========================== */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    padding:150px 0 90px;
+    background:
+      radial-gradient(ellipse 900px 600px at 85% 10%, rgba(200,161,91,0.10), transparent 60%),
+      var(--black);
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:64px;
+    align-items:center;
+    width:100%;
+  }
+  .hero-eyebrow{
+    color:var(--gold);
+    font-size:0.9rem;
+    letter-spacing:0.04em;
+    margin-bottom:22px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .hero-eyebrow .rule{ width:28px; }
+
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.6rem, 5.2vw, 4.1rem);
+    line-height:1.1;
+    color:var(--cream);
+    margin-bottom:26px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--gold-bright);
+  }
+  .hero p.lead{
+    max-width:480px;
+    color:var(--cream-dim);
+    font-size:1.08rem;
+    margin-bottom:40px;
+  }
+  .hero-actions{
+    display:flex; gap:16px; flex-wrap:wrap;
+  }
+
+  .hero-visual{
+    position:relative;
+    aspect-ratio:4/5;
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    background:var(--charcoal);
+  }
+  .hero-visual img{
+    width:100%; height:100%; object-fit:cover;
+    display:block;
+  }
+  .hero-visual .frame-caption{
+    position:absolute; bottom:0; left:0; right:0;
+    padding:22px 24px;
+    background:linear-gradient(0deg, rgba(6,6,5,0.85), transparent);
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--cream-dim);
+    font-size:0.95rem;
+  }
+
+  /* fallback illustration shown while/if the real photo is missing */
+  .photo-fallback{
+    width:100%; height:100%;
+  }
+
+  /* ===========================
+     INFO STRIP
+  =========================== */
+  .info-strip{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--charcoal);
+  }
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+  }
+  .info-item{
+    padding:44px 32px;
+    text-align:center;
+    border-right:1px solid var(--line);
+  }
+  .info-item:last-child{ border-right:none; }
+  .info-item .num{
+    font-family:var(--serif);
+    font-size:2.1rem;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .info-item .label{
+    color:var(--cream-dim);
+    font-size:0.92rem;
+    letter-spacing:0.02em;
+  }
+
+  /* ===========================
+     SECTION GENERIC
+  =========================== */
+  section{
+    padding:120px 0;
+  }
+  .section-head{
+    max-width:640px;
+    margin-bottom:64px;
+  }
+  .section-head .rule{ margin-bottom:22px; }
+  .section-head h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2rem, 3.6vw, 2.9rem);
+    color:var(--cream);
+    line-height:1.2;
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .7s var(--ease), transform .7s var(--ease);
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* ===========================
+     ABOUT
+  =========================== */
+  .about{
+    background:var(--black);
+  }
+  .about-grid{
+    display:grid;
+    grid-template-columns:0.85fr 1.15fr;
+    gap:72px;
+    align-items:center;
+  }
+  .about-visual{
+    aspect-ratio:1/1;
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    background:var(--charcoal);
+  }
+  .about-visual img{ width:100%; height:100%; object-fit:cover; }
+  .about-body p{
+    color:var(--cream-dim);
+    font-size:1.06rem;
+    max-width:520px;
+    margin-bottom:36px;
+  }
+
+  /* ===========================
+     SERVICES
+  =========================== */
+  .services{
+    background:var(--charcoal);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .service-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .service-card{
+    background:var(--charcoal);
+    padding:44px 32px;
+    transition:background .3s var(--ease);
+  }
+  .service-card:hover{
+    background:var(--charcoal-2);
+  }
+  .service-card .num{
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--gold);
+    font-size:1.1rem;
+    margin-bottom:28px;
+    display:block;
+  }
+  .service-card h3{
+    font-family:var(--serif);
+    font-size:1.3rem;
+    font-weight:600;
+    color:var(--cream);
+    margin-bottom:14px;
+  }
+  .service-card p{
+    color:var(--cream-dim);
+    font-size:0.96rem;
+  }
+
+  /* ===========================
+     GALLERY
+  =========================== */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+  }
+  .gallery-item{
+    aspect-ratio:3/4;
+    overflow:hidden;
+    border-radius:4px;
+    border:1px solid var(--line);
+    background:var(--charcoal);
+    position:relative;
+    cursor:pointer;
+  }
+  .gallery-item:first-child{
+    grid-column:span 2;
+    grid-row:span 2;
+    aspect-ratio:auto;
+  }
+  .gallery-item img{
+    width:100%; height:100%; object-fit:cover;
+    transition:transform .6s var(--ease), filter .6s var(--ease);
+  }
+  .gallery-item:hover img{
+    transform:scale(1.06);
+  }
+  .gallery-item .tag{
+    position:absolute; bottom:16px; left:16px;
+    font-size:0.82rem;
+    color:var(--cream-dim);
+    background:rgba(6,6,5,0.6);
+    padding:6px 12px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    backdrop-filter:blur(4px);
+  }
+
+  /* ===========================
+     CONTACT
+  =========================== */
+  .contact{
+    background:
+      radial-gradient(ellipse 800px 500px at 15% 20%, rgba(200,161,91,0.09), transparent 60%),
+      var(--black);
+    border-top:1px solid var(--line);
+  }
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:72px;
+  }
+  .contact h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.1rem,4vw,3.1rem);
+    color:var(--cream);
+    line-height:1.15;
+    margin-bottom:20px;
+  }
+  .contact-lead{
+    color:var(--cream-dim);
+    font-size:1.06rem;
+    margin-bottom:40px;
+    max-width:440px;
+  }
+  .contact-actions{
+    display:flex; gap:16px; flex-wrap:wrap;
+  }
+  .contact-card{
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:44px;
+    background:var(--charcoal);
+  }
+  .contact-row{
+    display:flex; gap:18px;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .contact-row:last-child{ border-bottom:none; }
+  .contact-row .ico{
+    width:38px; height:38px;
+    border:1px solid var(--gold);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    color:var(--gold);
+  }
+  .contact-row .txt .k{
+    font-size:0.82rem;
+    color:var(--cream-dim);
+    margin-bottom:4px;
+    letter-spacing:0.02em;
+  }
+  .contact-row .txt .v{
+    font-size:1.02rem;
+    color:var(--cream);
+  }
+
+  /* ===========================
+     FOOTER
+  =========================== */
+  footer{
+    border-top:1px solid var(--line);
+    padding:48px 0;
+    background:var(--black);
+  }
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer-logo{
+    font-family:var(--serif);
+    font-size:1.15rem;
+    color:var(--cream);
+    letter-spacing:0.04em;
+  }
+  .footer-logo span{ color:var(--gold); }
+  footer .copy{
+    color:var(--cream-dim);
+    font-size:0.88rem;
+  }
+
+  /* ===========================
+     RESPONSIVE
+  =========================== */
+  @media (max-width: 980px){
+    .hero-grid{ grid-template-columns:1fr; gap:48px; }
+    .hero-visual{ aspect-ratio:16/10; order:-1; }
+    .about-grid{ grid-template-columns:1fr; }
+    .about-visual{ max-width:420px; }
+    .service-grid{ grid-template-columns:repeat(2,1fr); }
+    .contact-grid{ grid-template-columns:1fr; gap:48px; }
+    .gallery-grid{ grid-template-columns:repeat(2,1fr); }
+    .gallery-item:first-child{ grid-column:span 2; }
+  }
+
+  @media (max-width: 720px){
+    .nav-links, .nav-cta{ display:none; }
+    .burger{ display:flex; }
+    section{ padding:80px 0; }
+    .info-grid{ grid-template-columns:1fr; }
+    .info-item{ border-right:none; border-bottom:1px solid var(--line); }
+    .info-item:last-child{ border-bottom:none; }
+    .service-grid{ grid-template-columns:1fr; }
+    .gallery-grid{ grid-template-columns:1fr; }
+    .gallery-item:first-child{ grid-column:span 1; grid-row:span 1; aspect-ratio:3/4; }
+    .contact-card{ padding:30px; }
+    .wrap{ padding:0 22px; }
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- ===========================
+       HEADER
+  =========================== -->
+  <header id="site-header">
+    <div class="nav">
+      <a href="#top" class="logo">TORRES <span>DE</span> BRITO</a>
+
+      <nav class="nav-links">
+        <a href="#top">Início</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#contactos">Contactos</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a href="tel:+244923431359" class="btn btn-gold">Marcar atendimento</a>
+      </div>
+
+      <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#top">Início</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#galeria">Galeria</a>
+    <a href="#contactos">Contactos</a>
+    <a href="tel:+244923431359" class="btn btn-gold">Marcar atendimento</a>
+  </div>
+
+  <!-- ===========================
+       HERO
+  =========================== -->
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="hero-eyebrow"><span class="rule"></span> Barbearia em Luanda</div>
+        <h1>O seu estilo.<br><em>A nossa</em> especialidade.</h1>
+        <p class="lead">Cortes e cuidados masculinos num espaço moderno, confortável e preparado para lhe proporcionar uma excelente experiência.</p>
+        <div class="hero-actions">
+          <a href="tel:+244923431359" class="btn btn-gold">Marcar atendimento</a>
+          <a href="#servicos" class="btn btn-outline">Ver serviços</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <img src="assets/barbearia.jpg" alt="Interior da Barbearia Torres de Brito, com cadeiras de barbeiro, espelhos e balcão"
+             onerror="this.replaceWith(document.getElementById('fallback-hero').content.cloneNode(true).firstElementChild)">
+        <div class="frame-caption">Torres de Brito — Luanda, Angola</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- fallback SVG illustrations used only if assets/barbearia.jpg is not found -->
+  <template id="fallback-hero">
+    <svg class="photo-fallback" viewBox="0 0 500 625" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="500" height="625" fill="#16140f"/>
+      <rect width="500" height="625" fill="url(#g1)"/>
+      <defs>
+        <radialGradient id="g1" cx="70%" cy="20%" r="80%">
+          <stop offset="0%" stop-color="#2a2419"/>
+          <stop offset="100%" stop-color="#0d0c09"/>
+        </radialGradient>
+      </defs>
+      <g stroke="#c8a15b" stroke-width="1.5" fill="none" opacity="0.85">
+        <!-- barber chair silhouette -->
+        <path d="M170 430 L170 340 Q170 320 190 320 L310 320 Q330 320 330 340 L330 430" />
+        <path d="M150 430 L350 430 L340 470 L160 470 Z" fill="#16140f"/>
+        <line x1="200" y1="470" x2="200" y2="520"/>
+        <line x1="300" y1="470" x2="300" y2="520"/>
+        <ellipse cx="250" cy="530" rx="90" ry="10" fill="#0d0c09" stroke="none"/>
+        <rect x="175" y="330" width="150" height="80" rx="6"/>
+        <!-- mirror -->
+        <rect x="205" y="120" width="90" height="140" rx="4"/>
+        <circle cx="250" cy="150" r="4" fill="#c8a15b" stroke="none"/>
+      </g>
+      <g stroke="#c8a15b" stroke-width="1" opacity="0.5">
+        <line x1="0" y1="500" x2="500" y2="500"/>
+      </g>
+      <text x="250" y="580" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="17" fill="#b9b2a1">Fotografia em breve</text>
+    </svg>
+  </template>
+
+  <!-- ===========================
+       INFO STRIP
+  =========================== -->
+  <section class="info-strip" style="padding:0;">
+    <div class="wrap" style="padding:0;">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="num">4,5 ★</div>
+          <div class="label">Avaliação</div>
+        </div>
+        <div class="info-item">
+          <div class="num">08–20h</div>
+          <div class="label">Horário</div>
+        </div>
+        <div class="info-item">
+          <div class="num">Luanda</div>
+          <div class="label">Localização</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       ABOUT
+  =========================== -->
+  <section class="about" id="sobre">
+    <div class="wrap about-grid">
+      <div class="about-visual reveal">
+        <img src="assets/barbearia.jpg" alt="Interior da Barbearia Torres de Brito"
+             onerror="this.replaceWith(document.getElementById('fallback-about').content.cloneNode(true).firstElementChild)">
+      </div>
+      <div class="about-body reveal">
+        <div class="rule" style="margin-bottom:22px;"></div>
+        <h2 style="font-family:var(--serif); font-weight:600; font-size:clamp(2rem,3.6vw,2.9rem); margin-bottom:24px;">Um espaço pensado para o seu estilo.</h2>
+        <p>Na Barbearia Torres de Brito, cada atendimento é pensado para unir qualidade, cuidado e conforto. Venha renovar o seu visual num ambiente profissional e acolhedor em Luanda.</p>
+        <a href="https://www.google.com/maps/place/Barbearia+Torres+de+Brito/" target="_blank" rel="noopener" class="btn btn-outline">Ver localização</a>
+      </div>
+    </div>
+  </section>
+
+  <template id="fallback-about">
+    <svg class="photo-fallback" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="500" height="500" fill="#16140f"/>
+      <g stroke="#c8a15b" stroke-width="1.4" fill="none" opacity="0.85">
+        <!-- scissors -->
+        <circle cx="150" cy="330" r="26"/>
+        <circle cx="150" cy="400" r="18"/>
+        <line x1="170" y1="315" x2="330" y2="150"/>
+        <line x1="160" y1="385" x2="330" y2="215"/>
+        <!-- razor -->
+        <rect x="300" y="120" width="130" height="20" rx="3" transform="rotate(35 300 120)"/>
+      </g>
+      <text x="250" y="460" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="16" fill="#b9b2a1">Fotografia em breve</text>
+    </svg>
+  </template>
+
+  <!-- ===========================
+       SERVICES
+  =========================== -->
+  <section class="services" id="servicos">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="rule"></div>
+        <h2>Serviços</h2>
+      </div>
+
+      <div class="service-grid">
+        <div class="service-card reveal">
+          <span class="num">01</span>
+          <h3>Corte Masculino</h3>
+          <p>Cortes modernos e clássicos adaptados ao seu estilo.</p>
+        </div>
+        <div class="service-card reveal">
+          <span class="num">02</span>
+          <h3>Barba</h3>
+          <p>Acabamento e cuidado para manter a barba sempre bem cuidada.</p>
+        </div>
+        <div class="service-card reveal">
+          <span class="num">03</span>
+          <h3>Barba &amp; Corte</h3>
+          <p>Uma experiência completa para renovar o visual.</p>
+        </div>
+        <div class="service-card reveal">
+          <span class="num">04</span>
+          <h3>Acabamentos</h3>
+          <p>Detalhes e finalizações para deixar o corte impecável.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       GALLERY
+  =========================== -->
+  <section class="gallery" id="galeria">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="rule"></div>
+        <h2>Galeria</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item reveal">
+          <img src="assets/barbearia.jpg" alt="Interior da Barbearia Torres de Brito"
+               onerror="this.replaceWith(document.getElementById('fallback-gallery').content.cloneNode(true).firstElementChild)">
+          <span class="tag">Interior</span>
+        </div>
+        <div class="gallery-item reveal" data-placeholder="chair"></div>
+        <div class="gallery-item reveal" data-placeholder="tools"></div>
+        <div class="gallery-item reveal" data-placeholder="mirror"></div>
+        <div class="gallery-item reveal" data-placeholder="detail"></div>
+      </div>
+    </div>
+  </section>
+
+  <template id="fallback-gallery">
+    <svg class="photo-fallback" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="500" height="500" fill="#16140f"/>
+      <g stroke="#c8a15b" stroke-width="1.4" fill="none" opacity="0.85">
+        <rect x="140" y="140" width="220" height="220" rx="4"/>
+        <line x1="140" y1="250" x2="360" y2="250"/>
+        <line x1="250" y1="140" x2="250" y2="360"/>
+      </g>
+      <text x="250" y="460" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="16" fill="#b9b2a1">Fotografia em breve</text>
+    </svg>
+  </template>
+
+  <!-- ===========================
+       CONTACT
+  =========================== -->
+  <section class="contact" id="contactos">
+    <div class="wrap contact-grid">
+      <div class="reveal">
+        <div class="rule" style="margin-bottom:22px;"></div>
+        <h2>Pronto para<br>renovar o visual?</h2>
+        <p class="contact-lead">Entre em contacto e marque o seu atendimento.</p>
+        <div class="contact-actions">
+          <a href="tel:+244923431359" class="btn btn-gold">Ligar agora</a>
+          <a href="https://www.google.com/maps/place/Barbearia+Torres+de+Brito/" target="_blank" rel="noopener" class="btn btn-outline">Como chegar</a>
+        </div>
+      </div>
+
+      <div class="contact-card reveal">
+        <div class="contact-row">
+          <div class="ico">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div class="txt">
+            <div class="k">Telefone</div>
+            <div class="v">+244 923 431 359</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="ico">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="txt">
+            <div class="k">Endereço</div>
+            <div class="v">R. Guilherme Pereira Inglês, Luanda, Angola</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="ico">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="txt">
+            <div class="k">Horário</div>
+            <div class="v">Aberto até às 20:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===========================
+       FOOTER
+  =========================== -->
+  <footer>
+    <div class="wrap footer-inner">
+      <div class="footer-logo">TORRES <span>DE</span> BRITO</div>
+      <div class="copy">© 2026 Barbearia Torres de Brito. Todos os direitos reservados.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+
+    // ---- header scroll state ----
+    var header = document.getElementById('site-header');
+    function onScroll(){
+      if(window.scrollY > 12){ header.classList.add('scrolled'); }
+      else{ header.classList.remove('scrolled'); }
+    }
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive:true });
+
+    // ---- mobile menu ----
+    var burger = document.getElementById('burger');
+    var menu = document.getElementById('mobile-menu');
+    function closeMenu(){
+      menu.classList.remove('open');
+      burger.classList.remove('active');
+      burger.setAttribute('aria-expanded','false');
+      document.body.style.overflow='';
+    }
+    burger.addEventListener('click', function(){
+      var isOpen = menu.classList.toggle('open');
+      burger.classList.toggle('active', isOpen);
+      burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    menu.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', closeMenu);
+    });
+
+    // ---- scroll reveal ----
+    var revealEls = document.querySelectorAll('.reveal');
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold:0.15, rootMargin:'0px 0px -60px 0px' });
+      revealEls.forEach(function(el){ io.observe(el); });
+    } else {
+      revealEls.forEach(function(el){ el.classList.add('in'); });
+    }
+
+    // ---- gallery placeholder illustrations (used only until real photos are added) ----
+    var placeholderSVGs = {
+      chair: '<svg class="photo-fallback" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="500" fill="#16140f"/><g stroke="#c8a15b" stroke-width="1.4" fill="none" opacity="0.85"><path d="M130 300 L130 220 Q130 205 145 205 L255 205 Q270 205 270 220 L270 300"/><rect x="140" y="215" width="120" height="70" rx="6"/><line x1="160" y1="340" x2="160" y2="380"/><line x1="240" y1="340" x2="240" y2="380"/><ellipse cx="200" cy="390" rx="70" ry="8"/></g><text x="200" y="450" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#b9b2a1">Fotografia em breve</text></svg>',
+      tools: '<svg class="photo-fallback" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="500" fill="#16140f"/><g stroke="#c8a15b" stroke-width="1.4" fill="none" opacity="0.85"><circle cx="140" cy="260" r="20"/><circle cx="140" cy="320" r="14"/><line x1="156" y1="248" x2="280" y2="120"/><line x1="150" y1="308" x2="280" y2="175"/></g><text x="200" y="450" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#b9b2a1">Fotografia em breve</text></svg>',
+      mirror: '<svg class="photo-fallback" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="500" fill="#16140f"/><g stroke="#c8a15b" stroke-width="1.4" fill="none" opacity="0.85"><rect x="140" y="150" width="120" height="180" rx="6"/><circle cx="200" cy="200" r="5" fill="#c8a15b" stroke="none"/></g><text x="200" y="450" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#b9b2a1">Fotografia em breve</text></svg>',
+      detail: '<svg class="photo-fallback" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><rect width="400" height="500" fill="#16140f"/><g stroke="#c8a15b" stroke-width="1.4" fill="none" opacity="0.85"><rect x="300" y="110" width="110" height="18" rx="3" transform="rotate(35 300 110)"/><circle cx="180" cy="280" r="60"/></g><text x="200" y="450" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="14" fill="#b9b2a1">Fotografia em breve</text></svg>'
+    };
+    document.querySelectorAll('[data-placeholder]').forEach(function(el){
+      var key = el.getAttribute('data-placeholder');
+      if(placeholderSVGs[key]){
+        el.innerHTML = placeholderSVGs[key] + '<span class="tag">Em breve</span>';
+      }
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
